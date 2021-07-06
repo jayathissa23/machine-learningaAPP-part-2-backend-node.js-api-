@@ -1,6 +1,6 @@
 const express =require('express');
-const bosyParser =require('body-parser');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt-nodejs');
 
 const app=express();
 
@@ -24,16 +24,31 @@ const database={
             entries:0,
             joined:new Date(),  
           },
+    ],
+    login:[
+        {
+            id:'987',
+            has:'',
+            email:'john@gmail.com'
+        }
     ]
 }
+    
 
-
-app.get('/',(req,res)=>{
-    res.send('this is working');
+app.get('/',(req,res)=>{  
+    res.send(database.users);
 })
 
 
 app.post('/signin',(req,res)=>{
+
+    bcrypt.compare('cookies', '$2a$10$wT88C79QFJzYmnQ8zefBhu2eGLqlhGBmi0/wTq5pFuoVa7JS5uiC2', function(err, res) {
+        console.log('1',res);
+     });    
+    bcrypt.compare('cookies1', '$2a$10$fzKxwYzdY14gyYzmqIPEceatX.A9qGqKC3xTSkjvC1PiYHOnj6SZi', function(err, res) {
+        console.log('2',res);
+     });     
+
     if(req.body.email===database.users[0].email &&
     req.body.password===database.users[0].password){
         res.json('sucsses');
@@ -45,6 +60,13 @@ app.post('/signin',(req,res)=>{
 app.post('/register',(req,res)=>{
     // res.send(req.body);
     const {email,name,password}=req.body;
+
+    bcrypt.hash(password, null,null, function(err, hash) {
+       console.log(hash);
+    });  
+
+
+
     database.users.push({
     "id":"1235",
     "name":name,
